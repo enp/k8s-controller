@@ -1,0 +1,20 @@
+apply plugin: 'groovy'
+apply plugin: 'application'
+
+mainClassName = 'ru.itx.enp.k8s.AppController'
+
+jar {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+	manifest {
+		attributes 'Main-Class': mainClassName
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.codehaus.groovy:groovy:3.+'
+}
