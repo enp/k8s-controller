@@ -1,3 +1,12 @@
 package ru.itx.enp.k8s
 
-println('Application Controller')
+JobController jobController = new JobController()
+WebController webController = new WebController(jobController)
+
+addShutdownHook {
+	webController.stop()
+	jobController.stop()
+}
+
+jobController.start()
+webController.start()

@@ -17,4 +17,5 @@ repositories {
 
 dependencies {
 	implementation 'org.codehaus.groovy:groovy:3.+'
+	implementation 'org.slf4j:slf4j-simple:1.+'
 }
