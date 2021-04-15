@@ -14,11 +14,22 @@ class WebController {
 	void start() {
 		log.info('start')
 		httpServer.createContext("/") { HttpExchange httpExchange ->
-			log.info("request from ${httpExchange.remoteAddress}")
+			String method = httpExchange.requestMethod
+			String message = httpExchange.requestBody.text
+			String response = ''
+			log.info("request from ${httpExchange.remoteAddress} : ${method} : ${message}")
+			switch (method) {
+				case 'POST':
+					response = jobController.run(message)
+					break
+				case 'GET':
+					response = jobController.list()
+					break
+			}
 			httpExchange.responseHeaders.add("Content-type", "text/plain")
-			httpExchange.sendResponseHeaders(200, 0)
-			httpExchange.responseBody.withWriter { out ->
-				out << "HELLO\n"
+			httpExchange.sendResponseHeaders(200, response.length())
+			httpExchange.responseBody.withWriter { writer ->
+				writer << response
 			}
 		}
 		httpServer.start()
